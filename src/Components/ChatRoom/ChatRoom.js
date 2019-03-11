@@ -23,6 +23,7 @@ class ChatRoom extends Component {
 		this.state = {
 			socket: socket(),
 			username: '',
+			imageURL: '',
 			input: '',
 			messages: [],
 		}
@@ -36,10 +37,11 @@ class ChatRoom extends Component {
 		axios
 			.get('/getuser')
 			.then((res) => {
-				console.log(res.data)
+				console.log(res.data.username)
 				this.setState({
 					...this.state,
-					username: res.data,
+					username: res.data.username,
+					imageURL: res.data.imgURL,
 				})
 
 				return this.state.username
