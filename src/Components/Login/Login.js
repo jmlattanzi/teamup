@@ -14,14 +14,24 @@ const styles = (theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		width: '25%',
-		marginLeft: 'auto',
-		marginRight: 'auto',
+		margin: '0 auto',
+		padding: '30px 10px 20px 10px',
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		border: '1px solid #eee',
 	},
 
 	form: {
 		display: 'flex',
 		flexDirection: 'column',
-		margin: '0 10px',
+		margin: '10px 20px',
+	},
+
+	submit: {
+		width: '30%',
+		margin: '10px auto',
 	},
 })
 
@@ -63,9 +73,16 @@ class Login extends Component {
 					Login
 				</Typography>
 				<form onSubmit={(e) => this.submitLogin(e)} className={classes.form}>
-					<Input placeholder='username' name='username' onChange={(e) => this.handleChange(e)} />
+					<Input
+						placeholder='username'
+						name='username'
+						onChange={(e) => this.handleChange(e)}
+						required
+					/>
 					<Input placeholder='image url' name='imgURL' onChange={(e) => this.handleChange(e)} />
-					<Button type='submit'>Login</Button>
+					<Button type='submit' className={classes.submit}>
+						Login
+					</Button>
 				</form>
 			</Paper>
 		)
