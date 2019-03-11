@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Message from './Message/Message.js';
 
 //@material-ui imports
 import PropTypes from 'prop-types';
@@ -8,16 +9,51 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+
+const styles = theme => ({
+    inputDiv:{
+        display:'flex'
+    }
+})
+
 class ChatRoom extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            messages:[
+                {username:'jeff', message:'my name is jeff'},
+                {username:'sheev', message:'i am the senate'},
+                {username:'jeff', message:'Cool.'}
+            ]
+        }
+    }
+
     render(){
+        const {classes} = this.props;
+        const {messages} = this.state;
         return(
             <Paper>
                 <div>
-                    <TextField placeholder='type your message here'/>
+                    {
+                        messages.map((val, i) => {
+                            return(
+                                <Message username={val.username} message={val.message} />
+                            )
+                        })
+                    }
+                </div>
+                <div className={classes.inputDiv}>
+                    <TextField fullWidth placeholder='type your message here'/>
+                    <Button>Send</Button>
                 </div>
             </Paper>
         )
     }
 }
 
-export default ChatRoom;
+ChatRoom.propTypes ={
+    classes: PropTypes.object.isRequired
+}
+
+
+export default withStyles(styles)(ChatRoom);
