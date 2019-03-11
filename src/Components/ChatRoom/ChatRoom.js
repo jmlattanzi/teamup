@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Message from './Message/Message.js'
+import firebase from '../../../firebase.js';
 
 //@material-ui imports
 import PropTypes from 'prop-types'
@@ -31,7 +32,9 @@ class ChatRoom extends Component {
 
 	componentDidMount() {
 		const { messages, socket } = this.state
-		console.log('messages: ', this.state.messages)
+        console.log('messages: ', this.state.messages)
+        
+        firebase.
 
 		socket.on('connect', () => {
 			this.setState({
