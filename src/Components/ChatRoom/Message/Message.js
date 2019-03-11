@@ -11,6 +11,8 @@ const styles = (theme) => ({
 		display: 'flex',
 		alignItems: 'center',
 		margin: '10px',
+		paddingBottom: '10px',
+		borderBottom: '1px solid #eee',
 	},
 
 	messageText: {

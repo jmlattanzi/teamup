@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Message from './Message/Message.js'
-import firebase from '../../firebase.js';
+import firebase from '../../firebase.js'
 
 //@material-ui imports
 import PropTypes from 'prop-types'
@@ -13,8 +13,36 @@ import socket from 'socket.io-client'
 import axios from 'axios'
 
 const styles = (theme) => ({
+	container: {
+		position: 'absolute',
+		top: '0',
+		left: '0',
+		width: '100%',
+		overflow: 'auto',
+	},
+
+	messageContainer: {
+		height: '620px',
+		overflow: 'auto',
+	},
+
 	inputDiv: {
 		display: 'flex',
+		padding: '10px',
+		width: '90%',
+	},
+
+	inputField: {
+		display: 'flex',
+		width: '100%',
+	},
+
+	inputBox: {
+		minWidth: '100%',
+	},
+
+	submitButton: {
+		margin: '0 15px',
 	},
 })
 
@@ -56,13 +84,17 @@ class ChatRoom extends Component {
 				})
 			})
 			.catch((err) => console.log(err))
-		
-		firebase.database().ref(`/messages`).once('value').then((snapshot) => {
-			if(snapshot.val()){
-				console.log(snapshot.val(), "UPDATE MESSAGES")
-				if(snapshot.val())this.setState({messages:snapshot.val().messages})
-			}
-		})
+
+		firebase
+			.database()
+			.ref(`/messages`)
+			.once('value')
+			.then((snapshot) => {
+				if (snapshot.val()) {
+					console.log(snapshot.val(), 'UPDATE MESSAGES')
+					if (snapshot.val()) this.setState({ messages: snapshot.val().messages })
+				}
+			})
 
 		socket.on('message', (message) => {
 			console.log(message)
@@ -93,41 +125,43 @@ class ChatRoom extends Component {
 			input: '',
 		})
 
-		const { socket, messages} = this.state
+		const { socket, messages } = this.state
 		socket.emit('message', {
 			username: this.state.username,
 			message: this.state.input,
 		})
 
-		
-
-		messages.push({username:this.state.username, message:this.state.input})
-		console.log("LOOK AT ME", messages)
-		firebase.database().ref('messages').set({messages})
-		messages.pop();
+		messages.push({ username: this.state.username, message: this.state.input })
+		console.log('LOOK AT ME', messages)
+		firebase
+			.database()
+			.ref('messages')
+			.set({ messages })
+		messages.pop()
 	}
 
 	render() {
 		const { classes } = this.props
 		const { messages, socket } = this.state
-		console.log(messages, "OVER HERE");
+		console.log(messages, 'OVER HERE')
 		return (
-			<Paper>
-				<div>
-					{
-						messages.map((val, i) => {
+			<Paper className={classes.container}>
+				<div className={classes.messageContainer}>
+					{messages.map((val, i) => {
 						return <Message username={val.username} message={val.message} />
 					})}
 				</div>
 				<div className={classes.inputDiv}>
-					<form onSubmit={(e) => this.submitMessage(e)}>
+					<form onSubmit={(e) => this.submitMessage(e)} className={classes.inputField}>
 						<TextField
-							fullWidth
 							placeholder='type your message here'
 							value={this.state.input}
 							onChange={(e) => this.handleChange(e)}
+							className={classes.inputBox}
 						/>
-						<Button type='submit'>Send</Button>
+						<Button type='submit' className={classes.submitButton}>
+							Send
+						</Button>
 					</form>
 				</div>
 			</Paper>
