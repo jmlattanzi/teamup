@@ -18,7 +18,14 @@ const styles = (theme) => ({
 		flexDirection: 'column',
 		alignItems: 'flex-start',
 		marginLeft: '20px',
-	},
+    },
+    username:{
+        fontWeight:'bold'
+    },
+    avatar:{
+        border:'1px solid black',
+        backgroundColor:'gray'
+    }
 })
 
 class Message extends Component {
@@ -26,9 +33,9 @@ class Message extends Component {
 		const { classes, username, message } = this.props
 		return (
 			<div className={classes.div}>
-				<Avatar>T</Avatar>
+				<Avatar src={`https://robohash.org/${username}.png`} className={classes.avatar}></Avatar>
 				<div className={classes.messageText}>
-					<Typography component='p' variant='subheading'>
+					<Typography component='p' variant='subheading' className={classes.username}>
 						{username}
 					</Typography>
 					<Typography component='p' variant='subheading'>
