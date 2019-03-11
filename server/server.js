@@ -1,33 +1,31 @@
-// login
-// logout
-// register
-
 require('dotenv').config()
 const express = require('express')
 const { json } = require('body-parser')
 const session = require('client-sessions')
-
 const app = express()
-app.use(session({
-    cookieName: 'user-session',
-    secret: process.env.SECRET
-}))
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+
+app.use(
+	session({
+		cookieName: 'user-session',
+		secret: 'taste the meat not the heat',
+		duration: 24 * 60 * 60 * 1000,
+		activeDuration: 1000 * 60 * 5,
+	})
+)
 
 app.get('/', (req, res) => {
-	res.json('working')
+	res.json('catch all')
 })
 
-app.post('/login', (req, res) => {
-	res.json('login route')
+io.on('connection', (socket) => {
+	console.log('user connected')
+
+	socket.on('disconnect', () => {
+		console.log('user disconnected')
+	})
 })
 
-app.post('/logout', (req, res) => {
-	res.json('logout')
-})
-
-app.post('/register', (req, res) => {
-	res.json('register')
-})
-
-const PORT = process.env.PORT || 3001
+const PORT = 3001
 app.listen(PORT, () => console.log(`Listening on localhost:${PORT}`))
