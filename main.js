@@ -3,7 +3,7 @@ const { app, BrowserWindow } = require('electron')
 let win // keep the window in the global scope
 
 const createWindow = () => {
-	win = new BrowserWindow({ width: 1024, height: 720 })
+	win = new BrowserWindow({ width: 1024, height: 699 })
 
 	win.loadURL('http://localhost:3000/')
 
