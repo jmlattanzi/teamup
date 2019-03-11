@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import socket from 'socket.io-client'
+import axios from 'axios'
 
 const styles = (theme) => ({
 	inputDiv: {
@@ -21,6 +22,7 @@ class ChatRoom extends Component {
 		super(props)
 		this.state = {
 			socket: socket(),
+			username: '',
 			input: '',
 			messages: [],
 		}
@@ -31,19 +33,35 @@ class ChatRoom extends Component {
 
 	componentDidMount() {
 		const { messages, socket } = this.state
-		console.log('messages: ', this.state.messages)
+		axios
+			.get('/getuser')
+			.then((res) => {
+				console.log(res.data)
+				this.setState({
+					...this.state,
+					username: res.data,
+				})
 
-		socket.on('connect', () => {
-			this.setState({
-				...this.state,
-				messages: [...this.state.messages, { username: 'BœrT', message: 'User connected' }],
+				return this.state.username
 			})
-		})
+			.then((user) => {
+				socket.on('connect', () => {
+					this.setState({
+						...this.state,
+						messages: [...this.state.messages, { username: 'BœrT', message: `${user} connected` }],
+					})
+				})
+			})
+			.catch((err) => console.log(err))
 
 		socket.on('message', (message) => {
+			console.log(message)
 			this.setState({
 				...this.state,
-				messages: [...this.state.messages, { username: 'horelius', message: message }],
+				messages: [
+					...this.state.messages,
+					{ username: message.username, message: message.message },
+				],
 			})
 		})
 	}
@@ -66,7 +84,10 @@ class ChatRoom extends Component {
 		})
 
 		const { socket } = this.state
-		socket.emit('message', this.state.input)
+		socket.emit('message', {
+			username: this.state.username,
+			message: this.state.input,
+		})
 	}
 
 	render() {

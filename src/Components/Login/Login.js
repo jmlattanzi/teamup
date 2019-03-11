@@ -25,7 +25,7 @@ class Login extends Component {
 
 		this.state = {
 			username: '',
-			password: '',
+			imgURL: '',
 		}
 
 		this.submitLogin = this.submitLogin.bind(this)
@@ -40,7 +40,13 @@ class Login extends Component {
 
 	submitLogin(e) {
 		e.preventDefault()
-		this.props.history.push('/chatroom')
+		axios
+			.post('/login', { username: this.state.username })
+			.then((res) => {
+				console.log(res)
+				this.props.history.push('/chatroom')
+			})
+			.catch((err) => console.log(err))
 	}
 
 	render() {
@@ -52,12 +58,7 @@ class Login extends Component {
 				</Typography>
 				<form onSubmit={(e) => this.submitLogin(e)}>
 					<Input placeholder='username' name='username' onChange={(e) => this.handleChange(e)} />
-					<Input
-						type='password'
-						placeholder='password'
-						nam='password'
-						onChange={(e) => this.handleChange(e)}
-					/>
+					<Input placeholder='image url' name='imgURL' onChange={(e) => this.handleChange(e)} />
 					<Button type='submit'>Login</Button>
 				</form>
 			</Paper>
