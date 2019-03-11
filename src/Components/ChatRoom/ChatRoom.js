@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Message from './Message/Message.js';
+import socket from 'socket.io-client';
 
 //@material-ui imports
 import PropTypes from 'prop-types';
@@ -28,6 +29,17 @@ class ChatRoom extends Component{
         }
     }
 
+    componentDidMount(){
+        const {messages} = this.state;
+
+        socket.on('connection', ()=>{
+            messages.push({username:'Discord-Clone-Bot', message:'*INSERT USERNAME HERE* has joined the chatroom'})
+        })
+        socket.on('message', (message)=>{
+
+        })
+    }
+
     render(){
         const {classes} = this.props;
         const {messages} = this.state;
@@ -37,7 +49,7 @@ class ChatRoom extends Component{
                     {
                         messages.map((val, i) => {
                             return(
-                                <Message username={val.username} message={val.message} />
+                                <Message key={i} username={val.username} message={val.message} />
                             )
                         })
                     }

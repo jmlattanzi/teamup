@@ -13,7 +13,7 @@ const styles = theme => ({
     card:{
         display:'flex',
         flexDirection:'column',
-        width:'25%',
+        width:'33%',
         marginLeft:'auto',
         marginRight:'auto'
     }
