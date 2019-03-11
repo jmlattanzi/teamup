@@ -20,6 +20,16 @@ const styles = theme => ({
 })
 
 class Login extends Component{
+    constructor() {
+        super()
+
+        this.submitLogin = this.submitLogin.bind(this)
+    }
+
+    submitLogin(e) {
+        console.log('Login submit')
+    }
+
     render(){
         const {classes} = this.props
         return(
