@@ -1,0 +1,1 @@
+insert into go_users (username, hash) values ($1, $2); select * from go_users where username = $1;
