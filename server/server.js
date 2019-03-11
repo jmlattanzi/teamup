@@ -18,6 +18,7 @@ app.use(
 		activeDuration: 1000 * 60 * 5,
 	})
 )
+
 app.use(cors())
 app.use(json())
 
