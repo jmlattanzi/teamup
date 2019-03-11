@@ -17,6 +17,12 @@ const styles = (theme) => ({
 		marginLeft: 'auto',
 		marginRight: 'auto',
 	},
+
+	form: {
+		display: 'flex',
+		flexDirection: 'column',
+		margin: '0 10px',
+	},
 })
 
 class Login extends Component {
@@ -56,7 +62,7 @@ class Login extends Component {
 				<Typography component='h1' variant='h3'>
 					Login
 				</Typography>
-				<form onSubmit={(e) => this.submitLogin(e)}>
+				<form onSubmit={(e) => this.submitLogin(e)} className={classes.form}>
 					<Input placeholder='username' name='username' onChange={(e) => this.handleChange(e)} />
 					<Input placeholder='image url' name='imgURL' onChange={(e) => this.handleChange(e)} />
 					<Button type='submit'>Login</Button>

@@ -24,13 +24,14 @@ app.use(json())
 app.post('/login', (req, res) => {
 	req.session.user = {
 		username: req.body.username,
+		imageURL: req.body.imgURL,
 	}
 
 	res.json('logged in')
 })
 
 app.get('/getuser', (req, res) => {
-	res.json(req.session.user.username)
+	res.json(req.session.user)
 })
 
 io.set('origins', '*:*')
