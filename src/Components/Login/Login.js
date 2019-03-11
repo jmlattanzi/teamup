@@ -1,50 +1,72 @@
-import React,{Component} from 'react';
-
+import React, { Component } from 'react'
 
 //@material-ui imports
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import Input from '@material-ui/core/Input'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import axios from 'axios'
 
-const styles = theme => ({
-    card:{
-        display:'flex',
-        flexDirection:'column',
-        width:'25%',
-        marginLeft:'auto',
-        marginRight:'auto'
-    }
+const styles = (theme) => ({
+	card: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '25%',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+	},
 })
 
-class Login extends Component{
-    constructor() {
-        super()
+class Login extends Component {
+	constructor() {
+		super()
 
-        this.submitLogin = this.submitLogin.bind(this)
-    }
+		this.state = {
+			username: '',
+			password: '',
+		}
 
-    submitLogin(e) {
-        console.log('Login submit')
-    }
+		this.submitLogin = this.submitLogin.bind(this)
+		this.handleChange = this.handleChange.bind(this)
+	}
 
-    render(){
-        const {classes} = this.props
-        return(
-            <Paper className={classes.card}>
-                <Typography component='h1' variant='h3'>Login</Typography>
-                <Input placeholder='username' />
-                <Input placeholder='password' />
-                <Button>Login</Button>
-            </Paper>
-        )
-    }
+	handleChange(e) {
+		this.setState({
+			[e.target.name]: e.target.value,
+		})
+	}
+
+	submitLogin(e) {
+		e.preventDefault()
+		this.props.history.push('/chatroom')
+	}
+
+	render() {
+		const { classes } = this.props
+		return (
+			<Paper className={classes.card}>
+				<Typography component='h1' variant='h3'>
+					Login
+				</Typography>
+				<form onSubmit={(e) => this.submitLogin(e)}>
+					<Input placeholder='username' name='username' onChange={(e) => this.handleChange(e)} />
+					<Input
+						type='password'
+						placeholder='password'
+						nam='password'
+						onChange={(e) => this.handleChange(e)}
+					/>
+					<Button type='submit'>Login</Button>
+				</form>
+			</Paper>
+		)
+	}
 }
 
-Login.propTypes ={
-    classes: PropTypes.object.isRequired
+Login.propTypes = {
+	classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(Login)

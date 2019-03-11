@@ -5,7 +5,8 @@ const session = require('client-sessions')
 const massive = require('massive')
 const bc = require('bcryptjs')
 const app = express()
-const http = require('http').Server(app)
+const cors = require('cors')
+const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
 app.use(
@@ -15,6 +16,7 @@ app.use(
 		activeDuration: 1000 * 60 * 5,
 	})
 )
+app.use(cors())
 
 massive(process.env.CONNECTION_STRING)
 	.then((db) => {
@@ -27,8 +29,8 @@ app.post('/', (req, res) => {
 	res.json(req.body)
 })
 
-app.post('/login', (req, res) => {
-	console.log(req.body)
+app.post('/login', async (req, res) => {
+	console.log('req.body: ', req.body)
 	const db = req.app.get('db')
 	db.find_user(req.body.username)
 		.then((results) => {
@@ -49,37 +51,16 @@ app.post('/login', (req, res) => {
 		.catch((err) => console.log(err))
 })
 
-app.post('/register', (req, res) => {
-	db.find_user(req.body.username)
-		.then((results) => {
-			if (results[0] && results[0].username) {
-				res.json('User already exists')
-			} else {
-				bc.hash(password, 12)
-					.then((hashed) => {
-						db.create_user([req.body.username, hashed])
-							.then((res) => {
-								req.session.user = {
-									username: req.body.username,
-								}
-
-								res.json(req.session.user)
-							})
-							.catch((err) => console.log(err))
-					})
-					.catch((err) => console.log(err))
-			}
-		})
-		.cathc((err) => console.log(err))
-})
-
+io.set('origins', '*:*')
 io.on('connection', (socket) => {
-	console.log('user connected')
-
 	socket.on('disconnect', () => {
 		console.log('user disconnected')
+	})
+
+	socket.on('message', (message) => {
+		io.emit('message', message)
 	})
 })
 
 const PORT = 3001
-app.listen(PORT, () => console.log(`Listening on localhost:${PORT}`))
+http.listen(PORT, () => console.log(`Listening on localhost:${PORT}`))
