@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Message from './Message/Message.js'
+import firebase from '../../firebase.js';
 
 //@material-ui imports
 import PropTypes from 'prop-types'
@@ -55,6 +56,13 @@ class ChatRoom extends Component {
 				})
 			})
 			.catch((err) => console.log(err))
+		
+		firebase.database().ref(`/messages`).once('value').then((snapshot) => {
+			if(snapshot.val()){
+				console.log(snapshot.val(), "UPDATE MESSAGES")
+				if(snapshot.val())this.setState({messages:snapshot.val().messages})
+			}
+		})
 
 		socket.on('message', (message) => {
 			console.log(message)
@@ -85,20 +93,29 @@ class ChatRoom extends Component {
 			input: '',
 		})
 
-		const { socket } = this.state
+		const { socket, messages} = this.state
 		socket.emit('message', {
 			username: this.state.username,
 			message: this.state.input,
 		})
+
+		
+
+		messages.push({username:this.state.username, message:this.state.input})
+		console.log("LOOK AT ME", messages)
+		firebase.database().ref('messages').set({messages})
+		messages.pop();
 	}
 
 	render() {
 		const { classes } = this.props
 		const { messages, socket } = this.state
+		console.log(messages, "OVER HERE");
 		return (
 			<Paper>
 				<div>
-					{messages.map((val, i) => {
+					{
+						messages.map((val, i) => {
 						return <Message username={val.username} message={val.message} />
 					})}
 				</div>
