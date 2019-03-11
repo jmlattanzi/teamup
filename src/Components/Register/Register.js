@@ -19,22 +19,23 @@ const styles = theme => ({
     }
 })
 
-class Login extends Component{
+class Register extends Component{
     render(){
         const {classes} = this.props
         return(
             <Paper className={classes.card}>
-                <Typography component='h1' variant='h3'>Login</Typography>
-                <Input placeholder='username' />
+                <Typography component='h1' variant='h3'>Register</Typography>
+                <Input placeholder='username' variant='contained' />
                 <Input placeholder='password' />
-                <Button>Login</Button>
+                <Input placeholder='confirm password' />
+                <Button>Register</Button>
             </Paper>
         )
     }
 }
 
-Login.propTypes ={
+Register.propTypes ={
     classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(Register);
